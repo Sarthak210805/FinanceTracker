@@ -1,0 +1,79 @@
+{% extends "finance/base.html" %}
+
+{% block title %}Transaction List{% endblock title %}
+
+{% block content %}
+
+<div class="max-w-6xl mx-auto mt-8">
+
+    <h1 class="text-2xl font-bold mb-6">
+        Transaction List
+    </h1>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+
+        <table class="min-w-full border-collapse">
+
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700 border">
+                        Date
+                    </th>
+
+                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700 border">
+                        Title
+                    </th>
+
+                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700 border">
+                        Amount
+                    </th>
+
+                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700 border">
+                        Type
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for transaction in transactions %}
+
+                <tr class="hover:bg-gray-50">
+
+                    <td class="px-6 py-4 border text-gray-700">
+                        {{ transaction.date }}
+                    </td>
+
+                    <td class="px-6 py-4 border text-gray-700">
+                        {{ transaction.title }}
+                    </td>
+
+                    <td class="px-6 py-4 border text-gray-700">
+                        ₹{{ transaction.amount }}
+                    </td>
+
+                    <td class="px-6 py-4 border text-gray-700">
+                        {{ transaction.transaction_type|title }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="4" class="text-center py-6 text-gray-500">
+                        No transactions found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock content %}

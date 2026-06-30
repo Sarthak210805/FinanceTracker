@@ -1,0 +1,72 @@
+{% extends "finance/base.html" %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto mt-10 px-4 pb-12">
+    <!-- Header -->
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-bold text-indigo-600 mb-1">Welcome to Your Finance Dashboard</h1>
+        <h2 class="text-xl font-bold text-gray-900 mb-2">{{ request.user.username|title }}</h2>
+        <p class="text-gray-600">Track your income, expenses, and goals effectively.</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Income -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-gray-800 font-medium mb-1">Total Income</h3>
+            <p class="text-2xl font-bold text-indigo-600">${{ total_income|default_if_none:0|floatformat:2 }}</p>
+        </div>
+        
+        <!-- Total Expenses -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-gray-800 font-medium mb-1">Total Expenses</h3>
+            <p class="text-2xl font-bold text-red-500">${{ total_expenses|default_if_none:0|floatformat:2 }}</p>
+        </div>
+
+        <!-- Net Savings -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-gray-800 font-medium mb-1">Net Savings</h3>
+            <p class="text-2xl font-bold text-indigo-600">${{ net_savings|default_if_none:0|floatformat:2 }}</p>
+        </div>
+    </div>
+
+    <!-- Goals Section -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6">Your Goals</h3>
+        
+        <div class="space-y-6">
+            {% for goal in goals %}
+            <div class="flex justify-between items-center border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                <div>
+                    <h4 class="text-gray-800 text-sm mb-1">{{ goal.name }}</h4>
+                    <p class="text-xs text-gray-500">Target: ${{ goal.target_amount|floatformat:2 }}</p>
+                    <p class="text-xs text-gray-500">Deadline: {{ goal.deadline|date:"F j, Y" }}</p>
+                </div>
+                <div>
+                    {% if goal.progress_percentage >= 100 %}
+                        <span class="bg-blue-600 text-white font-bold px-1 rounded text-sm">
+                            100.00%
+                        </span>
+                    {% else %}
+                        <span class="text-blue-600 font-bold text-sm">
+                            {{ goal.progress_percentage|floatformat:2 }}%
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-gray-500 text-sm">No goals added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Add New Goal Button -->
+    <div class="text-center mt-8">
+        <a href="{% url 'goal_add' %}" class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 px-6 rounded-md shadow transition duration-200">
+            Add New Goal
+        </a>
+    </div>
+</div>
+{% endblock content %}
